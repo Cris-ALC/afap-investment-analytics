@@ -1,0 +1,1 @@
+print("AFAP Investment Analytics - entorno funcionando")
