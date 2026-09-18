@@ -1,5 +1,30 @@
+# Entorno virtual
 .venv/
+venv/
+
+# Python
 __pycache__/
 *.pyc
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Variables de entorno
 .env
+
+# Datos descargados del BCU
+data/raw/*
+!data/raw/.gitkeep
+
+# Datos generados por el pipeline
+data/processed/*
+!data/processed/.gitkeep
+
+# Archivos temporales
+*.tmp
+
+# Archivos de diagnóstico temporal
+src/debug_pdf.py
+
+# Notas personales del proyecto
+Idea inicial y notas.docx
