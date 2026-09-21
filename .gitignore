@@ -28,3 +28,6 @@ src/debug_pdf.py
 
 # Notas personales del proyecto
 Idea inicial y notas.docx
+
+# Base de datos local generada
+*.duckdb

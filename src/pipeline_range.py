@@ -14,6 +14,7 @@ def run_range(start: str, end: str) -> None:
     Procesa todos los meses comprendidos entre start y end.
 
     Formato esperado:
+
     start = "2026-01"
     end   = "2026-08"
     """
@@ -24,7 +25,8 @@ def run_range(start: str, end: str) -> None:
         freq="M"
     )
 
-    successful_files = []
+    successful_composition_files = []
+    successful_literal_files = []
     errors = []
 
     print("\n======================================")
@@ -32,7 +34,6 @@ def run_range(start: str, end: str) -> None:
     print("======================================")
 
     for period in periods:
-
         year = period.year
         month = period.month
 
@@ -46,16 +47,37 @@ def run_range(start: str, end: str) -> None:
                 month
             )
 
-            output_path = PROCESSED_DIR / (
+            composition_path = PROCESSED_DIR / (
                 f"portfolio_composition_"
                 f"{year}_{month:02d}.csv"
             )
 
-            if output_path.exists():
-                successful_files.append(output_path)
+            literal_path = PROCESSED_DIR / (
+                f"portfolio_literal_"
+                f"{year}_{month:02d}.csv"
+            )
+
+            if not composition_path.exists():
+                raise FileNotFoundError(
+                    "No se generó el archivo de "
+                    f"composición: {composition_path}"
+                )
+
+            if not literal_path.exists():
+                raise FileNotFoundError(
+                    "No se generó el archivo de "
+                    f"literales: {literal_path}"
+                )
+
+            successful_composition_files.append(
+                composition_path
+            )
+
+            successful_literal_files.append(
+                literal_path
+            )
 
         except Exception as error:
-
             print(
                 f"\nERROR procesando "
                 f"{month:02d}/{year}: {error}"
@@ -68,53 +90,96 @@ def run_range(start: str, end: str) -> None:
                 }
             )
 
-    if successful_files:
+    # -----------------------------------
+    # HISTÓRICO DE DETALLE
+    # -----------------------------------
 
-        dataframes = []
+    if successful_composition_files:
+        composition_dataframes = []
 
-        for file_path in successful_files:
-
+        for file_path in successful_composition_files:
             df = pd.read_csv(file_path)
+            composition_dataframes.append(df)
 
-            dataframes.append(df)
-
-        df_history = pd.concat(
-            dataframes,
+        df_composition_history = pd.concat(
+            composition_dataframes,
             ignore_index=True
         )
 
-        history_path = (
+        composition_history_path = (
             PROCESSED_DIR
             / "portfolio_composition_history.csv"
         )
 
-        df_history.to_csv(
-            history_path,
+        df_composition_history.to_csv(
+            composition_history_path,
             index=False,
             encoding="utf-8-sig"
         )
 
-        print("\n======================================")
-        print("HISTÓRICO GENERADO")
-        print("======================================")
+    # -----------------------------------
+    # HISTÓRICO POR LITERAL
+    # -----------------------------------
 
+    if successful_literal_files:
+        literal_dataframes = []
+
+        for file_path in successful_literal_files:
+            df = pd.read_csv(file_path)
+            literal_dataframes.append(df)
+
+        df_literal_history = pd.concat(
+            literal_dataframes,
+            ignore_index=True
+        )
+
+        literal_history_path = (
+            PROCESSED_DIR
+            / "portfolio_literal_history.csv"
+        )
+
+        df_literal_history.to_csv(
+            literal_history_path,
+            index=False,
+            encoding="utf-8-sig"
+        )
+
+    # -----------------------------------
+    # RESUMEN
+    # -----------------------------------
+
+    print("\n======================================")
+    print("HISTÓRICOS GENERADOS")
+    print("======================================")
+
+    print(
+        f"Meses procesados correctamente: "
+        f"{len(successful_composition_files)}"
+    )
+
+    if successful_composition_files:
         print(
-            f"Meses procesados correctamente: "
-            f"{len(successful_files)}"
+            f"Registros composición detalle: "
+            f"{len(df_composition_history)}"
         )
 
         print(
-            f"Registros históricos: "
-            f"{len(df_history)}"
+            f"Archivo: "
+            f"{composition_history_path}"
+        )
+
+    if successful_literal_files:
+        print(
+            f"Registros composición literal: "
+            f"{len(df_literal_history)}"
         )
 
         print(
-            f"Archivo consolidado: "
-            f"{history_path}"
+            f"Archivo: "
+            f"{literal_history_path}"
         )
 
     if errors:
-
         print("\nMeses con errores:")
 
         for item in errors:
@@ -125,7 +190,6 @@ def run_range(start: str, end: str) -> None:
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         description=(
             "Descarga y procesa un rango mensual "

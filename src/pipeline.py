@@ -10,10 +10,12 @@ from download_data import download_portfolio_report
 from data_loader import (
     load_all_subfunds,
     get_portfolio_detail,
+    get_portfolio_literal_totals,
     enrich_detail_structure,
     normalize_dimensions,
     validate_portfolio_data,
     validate_total_percentages,
+    validate_literal_percentages,
     save_processed_portfolio,
 )
 
@@ -49,7 +51,10 @@ def run_portfolio_pipeline(
     df_detail = get_portfolio_detail(
         df_all
     )
-
+    # Composición completa a nivel de literal
+    df_literals = get_portfolio_literal_totals(
+        df_all
+    )
     # 4. Reconstruir Literal / instrumento / moneda
     df_detail = enrich_detail_structure(
         df_detail
@@ -58,6 +63,18 @@ def run_portfolio_pipeline(
     # 5. Normalizar dimensiones
     df_detail = normalize_dimensions(
         df_detail
+    )
+
+    afap_map = {
+        "SURA": "AFAP SURA",
+        "INTEGRACION": "INTEGRACION AFAP",
+        "REPUBLICA": "REPUBLICA AFAP",
+        "ITAU": "AFAP ITAU",
+        "TOTAL_SISTEMA": "TOTAL SISTEMA",
+    }
+
+    df_literals["afap_normalizada"] = (
+        df_literals["afap"].map(afap_map)
     )
 
     # 6. Controles de calidad
@@ -70,8 +87,15 @@ def run_portfolio_pipeline(
         df_all
     )
 
+    validate_literal_percentages(
+        df_literals
+    )
     # 7. Trazabilidad
     df_detail["archivo_origen"] = (
+        pdf_path.name
+    )
+    
+    df_literals["archivo_origen"] = (
         pdf_path.name
     )
 
@@ -86,10 +110,21 @@ def run_portfolio_pipeline(
         f"{report_date:%Y_%m}.csv"
     )
 
+    literal_output_path = Path(
+        "data/processed/"
+        f"portfolio_literal_"
+        f"{report_date:%Y_%m}.csv"
+    )
+
     # 9. Guardar dataset procesado
     save_processed_portfolio(
         df_detail,
         output_path
+    )
+
+    save_processed_portfolio(
+        df_literals,
+        literal_output_path
     )
 
     print("\nPIPELINE COMPLETADO CORRECTAMENTE.")

@@ -364,6 +364,41 @@ def get_portfolio_detail(df: pd.DataFrame) -> pd.DataFrame:
 
     return df_detail
 
+def get_portfolio_literal_totals(
+    df: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Devuelve la composición del activo a nivel de literal.
+
+    Incluye:
+    - D. TRANSITORIA
+    - LITERAL A
+    - LITERAL B
+    - LITERAL C
+    - LITERAL D
+    - LITERAL F
+
+    Excluye la fila TOTALES, que se utiliza únicamente
+    como control de calidad.
+    """
+
+    df_totals = df[
+        df["tipo_fila"] == "SUBTOTAL"
+    ].copy()
+
+    df_totals["literal"] = (
+        df_totals["instrumento_raw"]
+        .str.upper()
+        .str.replace(
+            "TOTAL ",
+            "",
+            regex=False,
+        )
+        .str.strip()
+    )
+
+    return df_totals
+
 def enrich_detail_structure(df: pd.DataFrame) -> pd.DataFrame:
     """
     Reconstruye la jerarquía:
@@ -606,6 +641,84 @@ def validate_total_percentages(df_all: pd.DataFrame) -> None:
                 ]
             ].to_string(index=False)
         )
+
+def validate_literal_percentages(
+    df_literals: pd.DataFrame
+) -> None:
+    """
+    Valida la composición completa a nivel de literal.
+
+    Para cada combinación subfondo + entidad:
+    - deben existir las 6 categorías esperadas;
+    - la suma debe ser aproximadamente 100%.
+
+    Se admite una pequeña diferencia por redondeo.
+    """
+
+    print("\n--- CONTROL DE COMPOSICIÓN POR LITERAL ---")
+
+    expected_literals = {
+        "D. TRANSITORIA",
+        "LITERAL A",
+        "LITERAL B",
+        "LITERAL C",
+        "LITERAL D",
+        "LITERAL F",
+    }
+
+    detected_literals = set(
+        df_literals["literal"]
+        .dropna()
+        .unique()
+    )
+
+    if detected_literals != expected_literals:
+        raise ValueError(
+            "Categorías de literal inesperadas. "
+            f"Detectadas: {detected_literals}"
+        )
+
+    totals = (
+        df_literals
+        .groupby(
+            ["subfondo", "afap"],
+            as_index=False,
+        )["valor_pct"]
+        .sum()
+    )
+
+    if len(totals) != 15:
+        raise ValueError(
+            "Se esperaban 15 combinaciones "
+            "subfondo-entidad."
+        )
+
+    # 0.0002 equivale a 0,02 puntos porcentuales.
+    invalid_totals = totals[
+        (totals["valor_pct"] - 1.0).abs()
+        > 0.0002
+    ]
+
+    if not invalid_totals.empty:
+        raise ValueError(
+            "La composición por literal no suma "
+            "aproximadamente 100%:\n"
+            + invalid_totals.to_string(index=False)
+        )
+
+    print(
+        "OK - Se detectaron las 6 categorías esperadas."
+    )
+
+    print(
+        "OK - Se detectaron las 15 combinaciones "
+        "subfondo-entidad."
+    )
+
+    print(
+        "OK - La composición por literal suma "
+        "aproximadamente 100%."
+    )
 
 def save_processed_portfolio(
     df: pd.DataFrame,
