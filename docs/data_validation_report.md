@@ -97,6 +97,52 @@ ORDER BY p.periodo, a.afap_nombre, s.subfund_nombre;
 
 **Resultado:** 12 registros, todos `LITERAL F` de Acumulación. La suma del resto de literales se mantiene dentro de la tolerancia en las 12 carteras. Un `NULL` no se convierte en cero sin validar el significado del espacio en blanco en la fuente.
 
+**Verificación contra la fuente original**
+
+Se verificó el informe de composición del portafolio del BCU correspondiente al 30/01/2026. En el subfondo Acumulación, la celda del LITERAL F de AFAP SURA se encuentra vacía, coincidiendo con el valor `NULL` almacenado en DuckDB.
+
+La cartera presenta un total publicado del 100,00 %. Se mantiene el valor nulo para preservar la información de origen. Los 11 casos restantes están pendientes de contraste individual con los PDF correspondientes.
+
+#### Verificación contra los PDF originales del BCU
+
+Se contrastaron los 12 valores nulos del LITERAL F del subfondo Acumulación con los ocho informes mensuales
+
+del BCU correspondientes a enero-agosto de 2026.
+
+La comprobación se realizó mediante un diagnóstico automatizado con `pdfplumber`, identificando la fila
+
+del LITERAL F y las posiciones horizontales de las columnas de cada AFAP. Adicionalmente, se revisaron visualmente los casos de enero y mayo de 2026.
+
+| Indicador | Resultado |
+
+|---|---:|
+
+| Informes mensuales examinados | 8 |
+
+| Valores nulos contrastados | 12 |
+
+| AFAP SURA | 8 casos |
+
+| AFAP ITAÚ | 4 casos |
+
+| Coincidencias | 12 |
+
+| Discrepancias detectadas | 0 |
+
+**Resultado: SUPERADO.**
+
+Los 12 valores NULL de DuckDB coinciden con posiciones sin porcentaje detectado en los PDF originales.
+
+Se conservan como NULL, sin sustituirlos por cero.
+
+**Evidencia técnica:**
+
+`src/diagnostics/check_literal_f_nulls.py`
+
+El control utiliza coordenadas específicas del diseño de los PDF analizados y deberá revisarse si el BCU
+
+modifica su formato.
+
 ### F03. Control informativo del total del detalle por instrumento
 
 ```sql
