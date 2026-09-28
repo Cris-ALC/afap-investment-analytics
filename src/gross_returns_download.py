@@ -11,7 +11,7 @@ RAW_DIR = PROJECT_ROOT / "data" / "raw"
 BASE_URLS = [
     (
         "https://www.bcu.gub.uy/Servicios-Financieros-SSF/"
-        "AFAPRentabilidades/Rentabilidad-Neta/"
+        "AFAPRentabilidades/Rentabilidad-Bruta/"
     ),
     (
         "https://www.bcu.gub.uy/Servicios-Financieros-SSF/"
@@ -25,12 +25,12 @@ def build_filename(year: int, month: int) -> str:
     yy = str(year)[-2:]
     mm = f"{month:02d}"
 
-    return f"cocf02d{mm}{yy}.pdf"
+    return f"cocf01d{mm}{yy}.pdf"
 
 
 def download_returns_report(year: int, month: int) -> Path:
     """
-    Descarga el reporte mensual de Rentabilidad Neta del BCU.
+    Descarga el reporte mensual de Rentabilidad Bruta del BCU.
 
     Prueba las distintas rutas históricas conocidas del BCU
     y devuelve la ruta local del PDF.
@@ -89,7 +89,7 @@ def download_returns_report(year: int, month: int) -> Path:
 
     raise FileNotFoundError(
         "No fue posible localizar el reporte de "
-        f"Rentabilidad Neta para {month:02d}/{year}."
+        f"Rentabilidad Bruta para {month:02d}/{year}."
     )
 
 def download_returns_range(
@@ -98,7 +98,7 @@ def download_returns_range(
     end_year: int,
     end_month: int,
 ) -> None:
-    """Descarga un rango mensual de reportes de Rentabilidad Neta."""
+    """Descarga un rango mensual de reportes de Rentabilidad Bruta."""
 
     year = start_year
     month = start_month
@@ -108,7 +108,7 @@ def download_returns_range(
 
     while (year, month) <= (end_year, end_month):
 
-        print(f"\n--- Rentabilidad Neta {month:02d}/{year} ---")
+        print(f"\n--- Rentabilidad Bruta {month:02d}/{year} ---")
 
         try:
             download_returns_report(
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=(
             "Descarga reportes mensuales "
-            "de Rentabilidad Neta del BCU."
+            "de Rentabilidad Bruta del BCU."
         )
     )
 

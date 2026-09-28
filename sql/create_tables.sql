@@ -163,3 +163,39 @@ CREATE TABLE IF NOT EXISTS fact_returns (
     FOREIGN KEY (subfund_id)
         REFERENCES dim_subfund(subfund_id)
 );
+
+-- ------------------------------------------------------------
+-- FACT: RENTABILIDAD BRUTA
+-- Una fila representa una tasa de rentabilidad bruta publicada
+-- para una AFAP/total del sistema, período y tipo de fondo.
+--
+-- tipo_tasa:
+--   TRM = Tasa de Rentabilidad Real Mensual
+--   TNA = Tasa de Rentabilidad Nominal Anual
+--   TRA = Tasa de Rentabilidad Real Anual en UR
+--
+-- subfund_id se utiliza únicamente para:
+--   CRECIMIENTO, ACUMULACION y RETIRO.
+--
+-- Para FAP y FONDO_VOLUNTARIO_PREVISIONAL,
+-- subfund_id permanece NULL.
+-- ------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS fact_gross_returns (
+    period_id INTEGER NOT NULL,
+    afap_id INTEGER NOT NULL,
+    tipo_fondo VARCHAR NOT NULL,
+    tipo_tasa VARCHAR NOT NULL,
+    subfund_id INTEGER,
+    rentabilidad_bruta DOUBLE NOT NULL,
+    archivo_origen VARCHAR,
+
+    FOREIGN KEY (period_id)
+        REFERENCES dim_period(period_id),
+
+    FOREIGN KEY (afap_id)
+        REFERENCES dim_afap(afap_id),
+
+    FOREIGN KEY (subfund_id)
+        REFERENCES dim_subfund(subfund_id)
+);

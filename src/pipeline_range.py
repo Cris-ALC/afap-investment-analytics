@@ -159,7 +159,7 @@ def run_range(start: str, end: str) -> None:
 
     if successful_composition_files:
         print(
-            f"Registros composición detalle: "
+           f"Registros reporte completo: "
             f"{len(df_composition_history)}"
         )
 

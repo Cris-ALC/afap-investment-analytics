@@ -1,0 +1,46 @@
+{
+  "name": "AFAP Investment Analytics | Dark",
+  "dataColors": [
+    "#59AEF5",
+    "#41C9B4",
+    "#A38CF4",
+    "#F0B35B",
+    "#E87991",
+    "#74B9D9",
+    "#8DD1A6",
+    "#D9A3D4"
+  ],
+  "background": "#101D2D",
+  "foreground": "#F2F6FF",
+  "tableAccent": "#59AEF5",
+  "good": "#41C9B4",
+  "neutral": "#F0B35B",
+  "bad": "#E87991",
+  "minimum": "#244765",
+  "center": "#59AEF5",
+  "maximum": "#41C9B4",
+  "null": "#667B92",
+  "textClasses": {
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 15, "color": "#F2F6FF"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#F2F6FF"},
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#F2F6FF"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 11, "color": "#A8BBD2"}
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{"show": true, "color": {"solid": {"color": "#1C2D42"}}, "transparency": 0}],
+        "border": [{"show": true, "color": {"solid": {"color": "#33465E"}}, "radius": 10}],
+        "dropShadow": [{"show": false}],
+        "visualHeader": [{"show": true, "foreground": {"solid": {"color": "#A8BBD2"}}}],
+        "title": [{"show": true, "fontFamily": "Segoe UI Semibold", "fontSize": 15, "fontColor": {"solid": {"color": "#F2F6FF"}}, "alignment": "left"}]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{"color": {"solid": {"color": "#101D2D"}}, "transparency": 0}],
+        "outspace": [{"color": {"solid": {"color": "#101D2D"}}, "transparency": 0}]
+      }
+    }
+  }
+}
