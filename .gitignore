@@ -31,3 +31,11 @@ Idea inicial y notas.docx
 
 # Base de datos local generada
 *.duckdb
+# Exportaciones generadas para Power BI
+powerbi/data_actualizada/
+
+# Respaldos locales de desarrollo
+src/respaldo/
+
+# Iconos locales de Power BI
+powerbi/icons/
