@@ -1,8 +1,8 @@
 # AFAP Investment Analytics | Uruguay
 
-Proyecto personal de **análisis financiero e ingeniería de datos**, desarrollado por **Ana Laura Cristaldo**, Contadora Pública con formación en Finanzas y Business Intelligence.
+Proyecto personal de **análisis financiero e ingeniería de datos** que transforma reportes públicos del Banco Central del Uruguay (BCU), publicados en PDF, en un histórico estructurado y un dashboard interactivo de Power BI.
 
-Transforma reportes públicos del Banco Central del Uruguay (BCU), publicados en PDF, en un histórico estructurado y un dashboard de Power BI para analizar el posicionamiento de las AFAP, la composición de sus portafolios y la evolución de activos y rentabilidades.
+Permite analizar el posicionamiento de las AFAP, la composición de sus portafolios y la evolución de activos y rentabilidades, integrando Python, SQL, DuckDB y controles de calidad de datos.
 
 **Python · SQL · DuckDB · Power BI · DAX**
 
@@ -32,12 +32,14 @@ El análisis es descriptivo: la composición aporta contexto, pero no constituye
 
 ## Páginas del informe
 
-| Página | Indicadores y visualizaciones |
-|---|---|
-| **Resumen ejecutivo** | Rentabilidad neta al cierre, ranking, brechas frente al líder y al promedio, activos en USD, comparación entre AFAP, evolución frente al promedio y lectura ejecutiva dinámica. |
-| **Composición** | Activos al cierre, variación de activos en el rango, literal de mayor peso, participación de los tres principales literales, principales instrumentos, evolución de activos y cambio de participación por literal. |
-| **Rentabilidad** | Rentabilidad neta al cierre, cambio de tasa en pb, brecha frente al promedio, TRM al cierre, evoluciones neta y bruta y comparaciones de subfondos, FAP y Régimen Especial. |
-| **Guía de lectura** | Uso de filtros, interpretación de KPI, unidades, fuentes, criterios de cálculo y limitaciones. |
+
+| Página                | Indicadores y visualizaciones                                                                                                                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Resumen ejecutivo** | Rentabilidad neta al cierre, ranking, brechas frente al líder y al promedio, activos en USD, comparación entre AFAP, evolución frente al promedio y lectura ejecutiva dinámica.                                    |
+| **Composición**       | Activos al cierre, variación de activos en el rango, literal de mayor peso, participación de los tres principales literales, principales instrumentos, evolución de activos y cambio de participación por literal. |
+| **Rentabilidad**      | Rentabilidad neta al cierre, cambio de tasa en pb, brecha frente al promedio, TRM al cierre, evoluciones neta y bruta y comparaciones de subfondos, FAP y Régimen Especial.                                        |
+| **Guía de lectura**   | Uso de filtros, interpretación de KPI, unidades, fuentes, criterios de cálculo y limitaciones.                                                                                                                     |
+
 
 Los filtros principales son **Período, AFAP y Subfondo**. Los comparativos mantienen visibles las distintas AFAP; el gráfico de FAP y Régimen Especial no se filtra por subfondo.
 
@@ -45,12 +47,14 @@ Los filtros principales son **Período, AFAP y Subfondo**. Los comparativos mant
 
 La fuente es la información pública oficial del **Banco Central del Uruguay**, incluida la publicada por su Superintendencia de Servicios Financieros.
 
-| Fuente | Uso |
-|---|---|
+
+| Fuente                                             | Uso                                                              |
+| -------------------------------------------------- | ---------------------------------------------------------------- |
 | Composición del Portafolio - Principales Variables | Participaciones por literal e instrumento e importes de activos. |
-| Reportes de rentabilidad neta | Tasas por subfondo, FAP agregado y Régimen Especial. |
-| Reportes de rentabilidad bruta | Series de tasas publicadas; el dashboard utiliza la TRM. |
-| Cotizaciones del BCU | Conversión de activos en pesos a USD equivalentes. |
+| Reportes de rentabilidad neta                      | Tasas por subfondo, FAP agregado y Régimen Especial.             |
+| Reportes de rentabilidad bruta                     | Series de tasas publicadas; el dashboard utiliza la TRM.         |
+| Cotizaciones del BCU                               | Conversión de activos en pesos a USD equivalentes.               |
+
 
 Se procesan los subfondos **Crecimiento, Acumulación y Retiro**, así como registros agregados cuando corresponden a la fuente. Las denominaciones incluyen República, SURA, Integración, Itaú y la denominación histórica Unión Capital. **Unión Capital e Itaú se conservan separadas en el modelo**; no se unen automáticamente sus series.
 
@@ -60,18 +64,20 @@ El Total del Sistema se utiliza cuando corresponde para controles y conciliacion
 
 El flujo integra descarga de reportes, extracción y normalización en Python, controles de calidad, consolidación histórica, carga en DuckDB, vistas SQL, exportación de tablas y visualización en Power BI.
 
-| Carpeta o archivo | Contenido |
-|---|---|
-| `data/raw/` | PDFs originales descargados del BCU. |
-| `data/processed/` | Datasets mensuales e históricos generados. |
-| `docs/` | Documentación metodológica, controles e informe PDF. |
-| `notebooks/` | Espacio para análisis exploratorio. |
-| `powerbi/` | Informe `.pbix`, tema visual e iconos. |
-| `powerbi/data_actualizada/` | Exportaciones generadas para el modelo de Power BI. |
-| `sql/` | Tablas, vistas analíticas, carga de dimensiones y controles. |
-| `src/` | Descarga, extracción, transformación, carga y validación. |
-| `src/diagnostics/` | Controles y diagnósticos iniciales conservados como referencia. |
-| `requirements.txt` | Dependencias Python. |
+
+| Carpeta o archivo           | Contenido                                                       |
+| --------------------------- | --------------------------------------------------------------- |
+| `data/raw/`                 | PDFs originales descargados del BCU.                            |
+| `data/processed/`           | Datasets mensuales e históricos generados.                      |
+| `docs/`                     | Documentación metodológica, controles e informe PDF.            |
+| `notebooks/`                | Espacio para análisis exploratorio.                             |
+| `powerbi/`                  | Informe `.pbix`, tema visual e iconos.                          |
+| `powerbi/data_actualizada/` | Exportaciones generadas para el modelo de Power BI.             |
+| `sql/`                      | Tablas, vistas analíticas, carga de dimensiones y controles.    |
+| `src/`                      | Descarga, extracción, transformación, carga y validación.       |
+| `src/diagnostics/`          | Controles y diagnósticos iniciales conservados como referencia. |
+| `requirements.txt`          | Dependencias Python.                                            |
+
 
 Los PDFs descargados, datasets generados, bases DuckDB, entorno virtual y respaldos locales están excluidos mediante `.gitignore`. El PDF de presentación en `docs/` y el archivo Power BI son entregables del proyecto.
 
@@ -87,13 +93,15 @@ El procesamiento reconstruye las dimensiones de literal, instrumento y moneda, n
 
 La capa analítica utiliza dimensiones de período, AFAP, subfondo, literal, instrumento y moneda, junto con tablas de composición, activos y rentabilidades.
 
-| Conjunto analítico | Granularidad conceptual |
-|---|---|
-| Composición por literal | Período, AFAP, subfondo y literal. |
+
+| Conjunto analítico          | Granularidad conceptual                                                  |
+| --------------------------- | ------------------------------------------------------------------------ |
+| Composición por literal     | Período, AFAP, subfondo y literal.                                       |
 | Composición por instrumento | Período, AFAP, subfondo y categorías de detalle de instrumento y moneda. |
-| Activos | Período, entidad, subfondo y concepto monetario. |
-| Rentabilidad neta | Período, AFAP, tipo de métrica y subfondo cuando corresponde. |
-| Rentabilidad bruta | Período, entidad, fondo o subfondo y tipo de tasa. |
+| Activos                     | Período, entidad, subfondo y concepto monetario.                         |
+| Rentabilidad neta           | Período, AFAP, tipo de métrica y subfondo cuando corresponde.            |
+| Rentabilidad bruta          | Período, entidad, fondo o subfondo y tipo de tasa.                       |
+
 
 El dataset de composición conserva, entre otros, `fecha`, `subfondo`, `afap`, `tipo_fila`, `instrumento_raw`, `valor_pct`, `literal`, `instrumento`, `moneda_raw`, `afap_normalizada`, `moneda` y `archivo_origen`.
 
@@ -114,6 +122,8 @@ Las participaciones de composición se almacenan como fracciones: **0,36 % se al
 - **Neta y bruta:** sus bases y horizontes pueden diferir. Su diferencia no se interpreta directamente como comisiones.
 - **Concentración por literal:** el peso de los tres principales literales describe la distribución por categorías; no mide por sí solo concentración por emisor ni cumplimiento de límites.
 
+
+
 ## Calidad y validación
 
 Los controles forman parte del proceso e incluyen estructura, entidades y subfondos esperados según el período, duplicados, valores faltantes, rangos de participaciones, totales y trazabilidad.
@@ -126,7 +136,7 @@ Los valores ausentes en la fuente no se imputan ni se convierten automáticament
 
 ### Validación inicial e histórico ampliado
 
-La primera validación abarcó enero-agosto de 2026: ocho meses, tres subfondos, cuatro AFAP y Total del Sistema. En ese conjunto se identificaron **95 valores faltantes en `valor_pct`**. La revisión manual de una muestra confirmó celdas vacías en los PDFs originales.
+La primera validación abarcó enero-agosto de 2026: ocho meses, tres subfondos, cuatro AFAP y Total del Sistema. En ese conjunto se identificaron **95 valores faltantes en** `valor_pct`. La revisión manual de una muestra confirmó celdas vacías en los PDFs originales.
 
 Ese resultado corresponde a la etapa inicial y no debe interpretarse como el conteo de faltantes del histórico ampliado a 32 meses. Las verificaciones manuales se efectuaron sobre muestras, no sobre cada celda del universo.
 
@@ -140,6 +150,8 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
+
+
 ### Composición de un mes
 
 ```powershell
@@ -151,6 +163,8 @@ El proceso descarga el reporte si corresponde, extrae los subfondos, transforma 
 ```text
 data/processed/portfolio_composition_2026_07.csv
 ```
+
+
 
 ### Composición de un rango
 
@@ -174,25 +188,31 @@ Las fuentes descargadas y los archivos generados deben reconstruirse antes de ac
 
 ## Tecnologías
 
-| Área | Herramientas |
-|---|---|
-| Extracción y transformación | Python, pandas, pdfplumber, requests, truststore. |
-| Almacenamiento y análisis | DuckDB y SQL. |
-| Visualización y métricas | Power BI, Power Query y DAX. |
-| Desarrollo y control de versiones | Cursor, Git y entornos virtuales. |
+
+| Área                              | Herramientas                                      |
+| --------------------------------- | ------------------------------------------------- |
+| Extracción y transformación       | Python, pandas, pdfplumber, requests, truststore. |
+| Almacenamiento y análisis         | DuckDB y SQL.                                     |
+| Visualización y métricas          | Power BI, Power Query y DAX.                      |
+| Desarrollo y control de versiones | Cursor, Git y entornos virtuales.                 |
+
+
+
 
 ## Estado y próximos pasos
 
-| Componente | Estado |
-|---|---|
-| Extracción, normalización y consolidación histórica | Implementado. |
-| Cobertura enero de 2024-agosto de 2026 | Incorporada. |
-| Rentabilidad neta y bruta | Incorporadas. |
-| DuckDB, vistas SQL y exportaciones | Implementados. |
-| Activos en USD equivalentes | Implementados. |
-| Dashboard de cuatro páginas | Desarrollado. |
-| Publicación en Power BI Service | Realizada con cuenta universitaria. |
-| Acceso público interactivo | Pendiente de habilitación. |
+
+| Componente                                          | Estado                              |
+| --------------------------------------------------- | ----------------------------------- |
+| Extracción, normalización y consolidación histórica | Implementado.                       |
+| Cobertura enero de 2024-agosto de 2026              | Incorporada.                        |
+| Rentabilidad neta y bruta                           | Incorporadas.                       |
+| DuckDB, vistas SQL y exportaciones                  | Implementados.                      |
+| Activos en USD equivalentes                         | Implementados.                      |
+| Dashboard de cuatro páginas                         | Desarrollado.                       |
+| Publicación en Power BI Service                     | Realizada con cuenta universitaria. |
+| Acceso público interactivo                          | Pendiente de habilitación.          |
+
 
 Antes de distribuir una nueva versión se revisan unidades, filtros, etiquetas y consistencia entre el `.pbix` y el PDF exportado.
 
@@ -200,6 +220,5 @@ Las siguientes ampliaciones contemplan facilitar el acceso público, actualizar 
 
 ## Autoría y alcance
 
-**Ana Laura Cristaldo — Contadora Pública, MBA y Máster en Finanzas, con formación en Business Intelligence y Data Science.**
+Desarrollado por iniciativa personal como proyecto de portfolio, utilizando exclusivamente información pública. No corresponde a un encargo laboral ni a una publicación oficial del BCU o de una AFAP.
 
-Proyecto desarrollado por iniciativa personal para integrar experiencia financiera, controles de calidad e implementación de soluciones de datos. No corresponde a un encargo laboral ni a una publicación oficial del BCU o de una AFAP. Utiliza información pública y no constituye una recomendación de inversión.
